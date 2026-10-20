@@ -107,6 +107,19 @@ canvas#cf{position:fixed;inset:0;pointer-events:none;z-index:60}
 .pty div{border:1px solid #ff5a0040;background:linear-gradient(135deg,#ff5a0014,#ff5a0004);border-radius:16px;padding:14px 16px}
 .pty small{display:block;color:var(--mut);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase}
 .pty b{font:600 15px Unbounded;display:block;margin-top:2px}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+input[type=text],input[type=email],input[type=tel]{font-size:16px}
+body::before{-webkit-mask-image:radial-gradient(ellipse at center,#000 30%,transparent 75%)}
+.top{-webkit-backdrop-filter:blur(14px)}
+#load,.center{min-height:100vh;min-height:100dvh}
+h1,h2,h3,.cl p,.pty b,.code{overflow-wrap:anywhere}
+.code{cursor:pointer;-webkit-user-select:all;user-select:all}
+.btn,.clr,.link{-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.btn{min-height:50px}
+@media(max-height:700px){.left{position:static}}
+@media(max-width:600px){body{font-size:14.5px}h2{font-size:21px}.card{padding:18px;border-radius:18px}.wrap{padding:18px 14px 40px;gap:18px}.doc{padding:18px 14px 40px}.paper h1{font-size:21px}.cl h3{font-size:14px}.price{font-size:21px}.qr{width:min(230px,70vw);height:min(230px,70vw)}.top .in{padding:10px 14px;gap:10px}.hl b{font-size:19px}.sig{height:150px}}
+@media(max-width:360px){.paper{padding:16px}.btn{font-size:13px;padding:15px 10px}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style>
 </head>
 <body>
@@ -177,6 +190,7 @@ canvas#cf{position:fixed;inset:0;pointer-events:none;z-index:60}
     <div class="sub" style="margin-top:18px">Resumo do pedido</div>
     <div class="row"><span>Aplicativo “Aperta o Play”<br><small style="color:var(--mut)">Pagamento único via Pix</small></span><span id="r1"></span></div>
     <div class="row"><span>Taxa de processamento</span><span>R$ 0,00</span></div>
+    <div style="margin:8px 0 4px;border:1px solid #ff5a0040;background:linear-gradient(135deg,#ff5a0014,#ff5a0004);border-radius:14px;padding:12px 14px"><div class="sub" style="font-size:10.5px">Responsável pelo serviço</div><div style="font:600 14px Unbounded;margin-top:4px">Pedro Henrique Pestana</div><div style="color:var(--mut);font-size:13px;margin-top:2px">CPF 551.319.708-14</div></div>
     <div class="row tot"><span class="d" style="font-weight:800">Total</span><span class="price" id="r2" style="font-size:22px"></span></div>
     <div class="signed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l5 5 9-10"/></svg><span id="sgInfo"></span></div>
   </div><div class="secure">Ambiente seguro com criptografia SSL 256-bit</div></aside>
@@ -254,6 +268,7 @@ function chk(){var n=$("nome").value.trim().split(/\s+/).length>1,c=cpfOk($("cpf
  $("signBtn").disabled=!(n&&c&&inked&&$("lido").checked)}
 $("nome").oninput=$("lido").onchange=chk;
 
+addEventListener("resize",function(){if(reached&&!inked&&!drawing)sizeSig();if($("docS").classList.contains("on"))upd()});
 /* 3. assinar */
 $("signBtn").onclick=function(){
  var img=cv.toDataURL("image/png"),now=new Date(),stamp=now.toLocaleDateString("pt-BR")+" às "+now.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}),raw=$("nome").value+$("cpf").value+now.toISOString()+img.length;
@@ -273,7 +288,9 @@ function sec(id){document.querySelectorAll(".sec").forEach(function(s){s.classLi
 $("bk").onclick=function(){sec("d1");$("q2").classList.remove("on")};
 function code(){return CFG.pix||"00020126PREENCHA-SEU-CODIGO-PIX-AQUI"}
 function pix(){var c=code();$("code").textContent=c;try{var q=qrcode(0,"M");q.addData(c);q.make();$("qr").innerHTML=q.createSvgTag(4,0)}catch(e){$("qr").textContent="QR indisponível"}}
-$("copy").onclick=function(){var b=this,f=function(){b.textContent="Código copiado";setTimeout(function(){b.textContent="Copiar código Pix"},2000)};(navigator.clipboard?navigator.clipboard.writeText(code()):Promise.reject()).then(f,f)};
+function legacyCopy(t){var a=document.createElement("textarea");a.value=t;a.setAttribute("readonly","");a.style.cssText="position:fixed;top:0;left:0;opacity:0;font-size:16px";document.body.appendChild(a);a.focus();a.select();a.setSelectionRange(0,t.length);var ok=false;try{ok=document.execCommand("copy")}catch(e){}document.body.removeChild(a);return ok}
+$("copy").onclick=function(){var b=this,reset=function(){setTimeout(function(){b.textContent="Copiar código Pix"},2200)},good=function(){b.textContent="Código copiado";reset()},bad=function(){if(legacyCopy(code()))good();else{b.textContent="Toque no código acima e copie";var r=document.createRange();r.selectNodeContents($("code"));var s=getSelection();s.removeAllRanges();s.addRange(r);reset()}};
+ if(navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(code()).then(good,bad);else bad()};
 
 function burst(){var c=$("cf"),x=c.getContext("2d");c.width=innerWidth;c.height=innerHeight;var p=[];for(var i=0;i<130;i++)p.push({x:innerWidth/2,y:innerHeight/2,vx:(Math.random()-.5)*16,vy:Math.random()*-15-2,s:Math.random()*7+3,col:["#ff5a00","#ff8a2a","#fff","#2ee59d"][i%4],l:100});
  (function f(){x.clearRect(0,0,c.width,c.height);var a=0;p.forEach(function(o){o.x+=o.vx;o.y+=o.vy;o.vy+=.45;o.l--;if(o.l>0){a++;x.fillStyle=o.col;x.globalAlpha=o.l/100;x.fillRect(o.x,o.y,o.s,o.s)}});if(a)requestAnimationFrame(f);else x.clearRect(0,0,c.width,c.height)})()}
