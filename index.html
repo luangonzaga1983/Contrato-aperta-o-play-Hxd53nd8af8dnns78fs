@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aperta o Play — Contrato e Pagamento</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%23ff5a00'/%3E%3Cpath d='M12 9l11 7-11 7z' fill='white'/%3E%3C/svg%3E">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@600;800&family=Inter:wght@400;500;600&family=Caveat:wght@600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+<style>
+:root{--bg:#0a0a0a;--card:#141414;--line:#272727;--tx:#f4f4f4;--mut:#8f8f8f;--or:#ff5a00;--or2:#ff8a2a;--ok:#2ee59d;color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px);scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--tx);font:15px/1.6 Inter,system-ui,sans-serif;min-height:100vh;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;z-index:0;background-image:radial-gradient(#ffffff0d 1px,transparent 1px);background-size:26px 26px;mask-image:radial-gradient(ellipse at center,#000 30%,transparent 75%)}
+.orb{position:fixed;border-radius:50%;filter:blur(100px);z-index:0;animation:float 14s ease-in-out infinite;pointer-events:none}
+.o1{width:460px;height:460px;background:#ff5a00;top:-160px;left:-120px;opacity:.32}.o2{width:380px;height:380px;background:#ff2d00;bottom:-140px;right:-100px;opacity:.2;animation-delay:-6s}
+@keyframes float{50%{transform:translate(50px,30px) scale(1.15)}}
+.scr{display:none;position:relative;z-index:1}.scr.on{display:block;animation:in .6s both}
+@keyframes in{from{opacity:0;transform:translateY(16px)}}
+h1,h2,.d{font-family:Unbounded,Inter,sans-serif;letter-spacing:-.02em}
+h2{font-size:24px;margin:0 0 4px;line-height:1.2}
+.brand{font-family:Unbounded;font-weight:800;background:linear-gradient(90deg,#fff,var(--or2));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{color:var(--mut);font-size:11px;letter-spacing:.18em;text-transform:uppercase}
+.hint{color:var(--mut);font-size:13px;margin:0 0 18px}
+.card{background:linear-gradient(180deg,#171717,#101010);border:1px solid var(--line);border-radius:22px;padding:24px;position:relative}
+.price{font-family:Unbounded;font-weight:800;color:var(--or);font-size:24px;text-shadow:0 0 26px #ff5a0066}
+/* loading */
+#load{min-height:100vh}.center{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:24px}
+.ring{width:130px;height:130px;position:relative;margin:28px 0}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:6}.ring .bg{stroke:var(--line)}
+.ring .fg{stroke:url(#g);stroke-linecap:round;stroke-dasharray:339.3;stroke-dashoffset:339.3;filter:drop-shadow(0 0 8px #ff5a00)}
+.ring span{position:absolute;inset:0;display:grid;place-items:center;font:800 22px Unbounded}
+.bar{width:min(340px,80vw);height:5px;background:var(--line);border-radius:9px;overflow:hidden}.bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--or),var(--or2));box-shadow:0 0 14px var(--or)}
+#lt{color:var(--mut);font-size:14px;margin-top:16px;min-height:22px;transition:opacity .3s}
+/* contract */
+.top{position:sticky;top:0;z-index:20;background:#0a0a0acc;backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.top .in{max-width:880px;margin:0 auto;padding:12px 20px;display:flex;align-items:center;gap:16px}
+.pg{flex:1;height:5px;background:var(--line);border-radius:9px;overflow:hidden}.pg i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--or),var(--or2));box-shadow:0 0 12px var(--or)}
+.pc{font:800 12px Unbounded;color:var(--or2);min-width:42px;text-align:right}
+.doc{max-width:880px;margin:0 auto;padding:28px 20px 60px}
+.paper{background:linear-gradient(180deg,#161616,#0f0f0f);border:1px solid var(--line);border-radius:24px;padding:36px;box-shadow:0 30px 80px #000a}
+@media(max-width:600px){.paper{padding:22px}}
+.paper h1{font-size:26px;margin:6px 0 10px}
+.pre{color:#b9b9b9;font-size:14px;border-left:3px solid var(--or);padding:4px 0 4px 14px;margin:18px 0 26px}
+.cl{padding:20px 0;border-top:1px solid var(--line);opacity:.35;transform:translateY(10px);transition:.7s}
+.cl.v{opacity:1;transform:none}
+.cl h3{margin:0 0 8px;font:600 15px Unbounded;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.cl h3 b{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,var(--or),var(--or2));display:grid;place-items:center;font-size:12px;box-shadow:0 0 16px #ff5a0055}
+.cl p{margin:6px 0;color:#d2d2d2;font-size:14.5px}
+.law{display:inline-block;background:#ff5a0016;border:1px solid #ff5a0030;color:var(--or2);border-radius:8px;padding:3px 10px;font-size:12px;margin-top:6px}
+.fav{color:var(--ok);font:500 11px Inter;border:1px solid #2ee59d44;background:#2ee59d12;padding:2px 9px;border-radius:99px}
+.hl{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 8px}@media(max-width:600px){.hl{grid-template-columns:1fr}}
+.hl div{border:1px solid #ff5a0035;background:#ff5a000d;border-radius:16px;padding:14px;text-align:center;font-size:12.5px;color:#cfcfcf}
+.hl b{display:block;font:800 22px Unbounded;color:var(--or2)}
+.rd{margin-top:26px;border:1px dashed var(--line);border-radius:18px;padding:20px}
+.chk{display:flex;gap:12px;align-items:flex-start;font-size:14px;cursor:pointer}
+.chk input{accent-color:var(--or);width:20px;height:20px;flex:none;margin-top:1px}
+.hint2{text-align:center;color:var(--mut);font-size:13px;margin-top:20px}
+.hint2 span{display:inline-block;animation:bob 1.4s infinite}@keyframes bob{50%{transform:translateY(5px)}}
+/* buttons / inputs */
+.btn{width:100%;border:0;border-radius:14px;padding:17px;font:800 14px Unbounded,sans-serif;color:#fff;cursor:pointer;background:linear-gradient(90deg,var(--or),var(--or2),var(--or));background-size:200% 100%;box-shadow:0 10px 34px #ff5a0055;transition:.3s;animation:sheen 4s linear infinite;margin-top:16px}
+.btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 14px 44px #ff5a0088}
+.btn:disabled{filter:grayscale(1);opacity:.35;cursor:not-allowed;animation:none}
+.btn.ghost{background:none;border:1px solid var(--line);box-shadow:none;animation:none;color:var(--tx);font-size:13px;margin-top:10px}
+@keyframes sheen{to{background-position:200% 0}}
+.g{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:560px){.g{grid-template-columns:1fr}}
+.f{display:flex;flex-direction:column;gap:5px;margin-bottom:12px}.f.w{grid-column:1/-1}
+label.l{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut)}
+input[type=text],input[type=email],input[type=tel]{background:#0c0c0c;border:1px solid var(--line);border-radius:12px;padding:13px 14px;color:var(--tx);font:inherit;outline:none;transition:.25s;width:100%}
+input:focus{border-color:var(--or);box-shadow:0 0 0 4px #ff5a0022}input.bad{border-color:#ff4545}
+.err{color:#ff6b6b;font-size:12px}
+/* signature */
+.sig{position:relative;background:#0c0c0c;border:1px solid var(--line);border-radius:16px;height:170px;overflow:hidden;touch-action:none}
+.sig canvas{width:100%;height:100%;display:block;cursor:crosshair}
+.sig em{position:absolute;inset:0;display:grid;place-items:center;color:#3c3c3c;font:600 30px Caveat;pointer-events:none;transition:.3s}
+.sig::after{content:"";position:absolute;left:18px;right:18px;bottom:34px;border-bottom:1px dashed #333}
+.sig small{position:absolute;left:18px;bottom:10px;color:#4a4a4a;font-size:11px;letter-spacing:.1em;text-transform:uppercase}
+.clr{background:none;border:0;color:var(--or2);cursor:pointer;font:inherit;font-size:12px;float:right;margin:6px 0}
+.stamp{margin-top:14px;border:1px solid #2ee59d40;background:#2ee59d0d;border-radius:14px;padding:14px;display:none;gap:14px;align-items:center}
+.stamp.on{display:flex}.stamp img{height:52px;background:#fff;border-radius:8px;padding:2px}
+.stamp small{color:var(--mut);display:block;font-size:11.5px;word-break:break-all}
+/* checkout */
+.wrap{max-width:1100px;margin:0 auto;padding:32px 20px 60px;display:grid;grid-template-columns:1fr 1.1fr;gap:30px}
+@media(max-width:860px){.wrap{grid-template-columns:1fr}}
+.left{position:sticky;top:20px;align-self:start}@media(max-width:860px){.left{position:static}}
+.row{display:flex;justify-content:space-between;gap:10px;padding:8px 0;font-size:14px}
+.tot{border-top:1px solid var(--line);margin-top:8px;padding-top:14px;align-items:center}
+.badge{display:inline-flex;gap:8px;align-items:center;background:#ff5a0016;border:1px solid #ff5a0040;color:var(--or2);padding:5px 12px;border-radius:99px;font-size:12px;margin:0 6px 6px 0}
+.badge::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--or)}
+.signed{margin-top:14px;display:flex;gap:10px;align-items:center;font-size:12.5px;color:var(--ok)}
+.signed svg{width:20px;height:20px;flex:none}
+.steps{display:flex;gap:8px;margin-bottom:20px}.steps i{flex:1;height:4px;border-radius:9px;background:var(--line);position:relative;overflow:hidden}
+.steps i::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--or),var(--or2));transform:scaleX(0);transform-origin:left;transition:.6s}.steps i.on::after{transform:scaleX(1)}
+.sec{display:none}.sec.on{display:block;animation:in .5s both}
+.qr{background:#fff;border-radius:18px;padding:14px;width:230px;height:230px;margin:6px auto 14px;display:grid;place-items:center;box-shadow:0 0 60px #ff5a0044;position:relative;overflow:hidden}
+.qr svg{width:100%;height:100%}.qr::after{content:"";position:absolute;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--or),transparent);animation:scan 2.4s ease-in-out infinite;box-shadow:0 0 14px var(--or)}
+@keyframes scan{0%,100%{top:8%}50%{top:90%}}
+.wait{text-align:center;color:var(--mut);font-size:13px;margin-top:4px}.wait b{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--or);margin-right:8px;animation:pulse 1.2s infinite}
+@keyframes pulse{50%{opacity:.2;transform:scale(1.6)}}
+.code{background:#0c0c0c;border:1px solid var(--line);border-radius:12px;padding:12px;font:11px/1.5 ui-monospace,Consolas,monospace;color:var(--mut);word-break:break-all;max-height:74px;overflow:auto;margin:6px 0}
+.secure{text-align:center;color:var(--mut);font-size:12px;margin-top:14px}
+.ck{width:80px;height:80px;border-radius:50%;margin:0 auto 14px;display:grid;place-items:center;background:linear-gradient(135deg,var(--ok),#13b878);animation:pop .6s both}
+.ck svg{width:40px;height:40px}@keyframes pop{from{transform:scale(0)}60%{transform:scale(1.2)}}
+canvas#cf{position:fixed;inset:0;pointer-events:none;z-index:60}
+.pty{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:10px 0}@media(max-width:600px){.pty{grid-template-columns:1fr}}
+.pty div{border:1px solid #ff5a0040;background:linear-gradient(135deg,#ff5a0014,#ff5a0004);border-radius:16px;padding:14px 16px}
+.pty small{display:block;color:var(--mut);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase}
+.pty b{font:600 15px Unbounded;display:block;margin-top:2px}
+</style>
+</head>
+<body>
+<div class="orb o1"></div><div class="orb o2"></div><canvas id="cf"></canvas>
+
+<!-- 1. CARREGANDO CONTRATO -->
+<section class="scr on" id="load"><div class="center">
+  <div class="brand" style="font-size:30px">Aperta o Play</div>
+  <div class="sub" style="margin-top:6px">Contrato de prestação de serviços</div>
+  <div class="ring"><svg viewBox="0 0 120 120"><defs><linearGradient id="g"><stop offset="0" stop-color="#ff5a00"/><stop offset="1" stop-color="#ff8a2a"/></linearGradient></defs><circle class="bg" cx="60" cy="60" r="54"/><circle class="fg" id="rf" cx="60" cy="60" r="54"/></svg><span id="rp">0%</span></div>
+  <div class="bar"><i id="lb"></i></div>
+  <div id="lt">Preparando documento</div>
+</div></section>
+
+<!-- 2. LEITURA DO CONTRATO -->
+<section class="scr" id="docS">
+  <div class="top"><div class="in"><span class="brand" style="font-size:16px">Aperta o Play</span><div class="pg"><i id="pgb"></i></div><span class="pc" id="pgt">0%</span></div></div>
+  <div class="doc"><div class="paper">
+    <div class="sub">Documento 001 · <span id="dt"></span></div>
+    <h1>Contrato de Prestação de Serviços</h1>
+    <div style="color:var(--mut);font-size:13px">Desenvolvimento do aplicativo Android “Aperta o Play”</div>
+    <div class="pre">Este contrato é regido pelo Código Civil (Lei 10.406/2002) e pelo Código de Defesa do Consumidor (Lei 8.078/1990). Em caso de dúvida, vale sempre a interpretação mais favorável ao CONTRATANTE (CDC, art. 47). Cláusulas com o selo <span class="fav">a seu favor</span> ampliam os seus direitos. Role até o final para assinar.</div>
+    <div class="hl"><div><b>8h</b>Entrega do app</div><div><b>8h</b>Envio à Play Store</div><div><b>30 dias</b>Reembolso garantido</div></div>
+
+    <div class="cl"><h3><b>00</b>Identificação do responsável pelo serviço</h3><div class="pty"><div><small>Contratado(a)</small><b>Pedro Henrique Pestana</b></div><div><small>CPF</small><b>551.319.708-14</b></div></div><p>O CONTRATADO acima é o responsável direto pela execução, entrega e publicação do aplicativo, e responde pessoalmente pelas obrigações deste contrato. O CONTRATANTE será identificado pelo nome e CPF informados na assinatura, ao final deste documento.</p><span class="law">Decreto 7.962/2013, art. 2º, I (identificação do fornecedor) · CDC, art. 31 · Código Civil, art. 104</span></div>
+    <div class="cl"><h3><b>01</b>Objeto</h3><p>Criação, publicação e entrega do aplicativo Android “Aperta o Play”, conforme o que for combinado por escrito (WhatsApp ou e-mail) entre as partes.</p><span class="law">Código Civil, arts. 593 a 609 · CDC, art. 30 (a oferta obriga)</span></div>
+    <div class="cl"><h3><b>02</b>Prazo de entrega: até 8 horas <span class="fav">a seu favor</span></h3><p>O aplicativo será entregue em até 8 horas após a confirmação do pagamento e o envio das informações necessárias. Atraso injustificado dá direito a desconto proporcional ou rescisão com reembolso integral.</p><span class="law">CDC, art. 35 · Código Civil, arts. 389 e 475</span></div>
+    <div class="cl"><h3><b>03</b>Publicação na Play Store: até 8 horas <span class="fav">a seu favor</span></h3><p>O CONTRATADO enviará o aplicativo à Google Play em até 8 horas após a entrega e a aprovação do CONTRATANTE. O tempo de análise da Google independe das partes e não conta nesse prazo, mas o CONTRATADO acompanhará e corrigirá, sem custo, qualquer reprovação por falha técnica.</p><span class="law">CDC, art. 6º, III (informação clara) · Código Civil, art. 422 (boa-fé objetiva)</span></div>
+    <div class="cl"><h3><b>04</b>Forma de pagamento <span class="fav">a seu favor</span></h3><p>O valor total do aplicativo é de <b id="cT"></b>, em pagamento único de <b id="c1"></b> por Pix, feito agora, antes do início do desenvolvimento. Não há parcelas, taxa oculta, juros nem cobrança extra.</p><span class="law">CDC, art. 6º, III e art. 39, V · Decreto 7.962/2013, art. 2º</span></div>
+    <div class="cl"><h3><b>05</b>Garantia de reembolso: 30 dias <span class="fav">a seu favor</span></h3><p>Você pode pedir a devolução de 100% do que pagou em até 30 dias, a contar da entrega, sem precisar justificar. O reembolso é feito por Pix em até 7 dias úteis. Esse prazo é maior que os 7 dias exigidos por lei.</p><span class="law">CDC, art. 49 (arrependimento) · art. 51, I e IV (cláusulas abusivas são nulas)</span></div>
+    <div class="cl"><h3><b>06</b>Garantia de satisfação <span class="fav">a seu favor</span></h3><p>Se você não gostar, o CONTRATADO modifica o que você pedir no aplicativo (telas, cores, textos, funções do escopo) sem custo adicional, quantas vezes forem necessárias até você aprovar ou optar pelo reembolso.</p><span class="law">CDC, art. 20 (reexecução gratuita ou restituição) · art. 6º, VI</span></div>
+    <div class="cl"><h3><b>07</b>Propriedade do aplicativo <span class="fav">a seu favor</span></h3><p>Após a quitação, os direitos patrimoniais do aplicativo e do código-fonte entregue pertencem ao CONTRATANTE. O CONTRATADO não revende nem reutiliza sua identidade visual e conteúdo.</p><span class="law">Lei 9.609/1998 · Lei 9.610/1998, arts. 49 e 50</span></div>
+    <div class="cl"><h3><b>08</b>Proteção de dados (LGPD) <span class="fav">a seu favor</span></h3><p>Seus dados (nome, CPF, e-mail, telefone) serão usados só para a execução deste contrato, guardados com segurança e nunca vendidos. Você pode pedir acesso, correção ou exclusão a qualquer momento.</p><span class="law">Lei 13.709/2018, arts. 6º, 7º, V, 9º e 18 · Lei 12.965/2014, art. 7º</span></div>
+    <div class="cl"><h3><b>09</b>Confidencialidade e responsabilidade <span class="fav">a seu favor</span></h3><p>As ideias e informações do seu projeto são confidenciais. O CONTRATADO responde por falhas na execução e corrige defeitos de funcionamento do escopo contratado por 30 dias após a entrega.</p><span class="law">Código Civil, arts. 186, 927 e 422 · CDC, arts. 14 e 25</span></div>
+    <div class="cl"><h3><b>10</b>Assinatura eletrônica e foro</h3><p>A assinatura eletrônica deste documento, com registro de data, hora e código de autenticidade, tem validade jurídica entre as partes. Fica eleito o foro do domicílio do CONTRATANTE.</p><span class="law">MP 2.200-2/2001, art. 10, §2º · Lei 14.063/2020 · CDC, art. 101, I · Código Civil, art. 107</span></div>
+
+    <div class="hint2" id="scrollHint"><span>Role até o final para liberar a assinatura</span></div>
+
+    <div class="rd" id="signBox" style="display:none">
+      <h2 style="font-size:20px">Assinatura do contrato</h2>
+      <p class="hint">Confirme a leitura e assine como CONTRATANTE.</p>
+      <div class="g">
+        <div class="f"><label class="l">Nome completo</label><input type="text" id="nome" autocomplete="name" placeholder="Seu nome completo"></div>
+        <div class="f"><label class="l">CPF</label><input type="text" id="cpf" inputmode="numeric" placeholder="000.000.000-00" maxlength="14"><span class="err" id="eCpf"></span></div>
+      </div>
+      <label class="l">Desenhe sua assinatura</label>
+      <div class="sig"><canvas id="sg"></canvas><em id="sgh">Assine aqui</em><small>Assinatura do contratante</small></div>
+      <button class="clr" id="clr" type="button">Limpar assinatura</button>
+      <label class="chk" style="clear:both"><input type="checkbox" id="lido"><span>Declaro que li e compreendi todas as cláusulas deste contrato e concordo com o seu conteúdo.</span></label>
+      <button class="btn" id="signBtn" disabled>Assinar contrato</button>
+    </div>
+  </div></div>
+</section>
+
+<!-- 3. VALIDANDO ASSINATURA -->
+<section class="scr" id="valid"><div class="center">
+  <div class="ring" style="width:90px;height:90px"><svg viewBox="0 0 120 120" style="animation:spin 1s linear infinite"><circle class="bg" cx="60" cy="60" r="54"/><circle class="fg" cx="60" cy="60" r="54" style="stroke-dashoffset:240"/></svg></div>
+  <div class="d" style="font-weight:800">Registrando assinatura</div><div id="vt" class="hint" style="margin-top:8px">Gerando código de autenticidade</div>
+</div></section>
+<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
+
+<!-- 4. CHECKOUT -->
+<section class="scr" id="chk"><div class="wrap">
+  <aside class="left"><div class="card">
+    <div class="brand" style="font-size:30px">Aperta o Play</div>
+    <div class="sub" style="margin:4px 0 16px">Desenvolvimento de aplicativos</div>
+    <span class="badge">Entrega em até 8h</span><span class="badge">Play Store em até 8h</span><span class="badge">Reembolso em 30 dias</span><span class="badge">Ajustes até você gostar</span>
+    <div class="sub" style="margin-top:18px">Resumo do pedido</div>
+    <div class="row"><span>Aplicativo “Aperta o Play”<br><small style="color:var(--mut)">Pagamento único via Pix</small></span><span id="r1"></span></div>
+    <div class="row"><span>Taxa de processamento</span><span>R$ 0,00</span></div>
+    <div class="row tot"><span class="d" style="font-weight:800">Total</span><span class="price" id="r2" style="font-size:22px"></span></div>
+    <div class="signed"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12l5 5 9-10"/></svg><span id="sgInfo"></span></div>
+  </div><div class="secure">Ambiente seguro com criptografia SSL 256-bit</div></aside>
+
+  <main class="card">
+    <div class="steps"><i class="on"></i><i id="q2"></i></div>
+    <section class="sec on" id="d1">
+      <h2>Seus dados</h2><p class="hint">Para liberar o início do seu aplicativo.</p>
+      <div class="g">
+        <div class="f w"><label class="l">Nome</label><input type="text" id="nome2" readonly></div>
+        <div class="f"><label class="l">CPF</label><input type="text" id="cpf2" readonly></div>
+        <div class="f"><label class="l">WhatsApp</label><input type="tel" id="tel" placeholder="(11) 90000-0000" maxlength="15"></div>
+        <div class="f w"><label class="l">E-mail (Gmail)</label><input type="email" id="mail" placeholder="voce@gmail.com"><span class="err" id="eMail"></span></div>
+        <div class="f w"><label class="l">E-mail da conta Google Play Console (opcional)</label><input type="email" id="play" placeholder="conta usada para publicar o app"></div>
+      </div>
+      <button class="btn" id="go">Ir para o pagamento</button>
+    </section>
+    <section class="sec" id="d2">
+      <h2>Finalizar<br>Pagamento</h2><p class="hint">Pagamento via Pix. A aprovação é imediata.</p>
+      <div class="qr" id="qr"></div>
+      <div style="text-align:center"><div class="price" id="vEt"></div><div class="wait"><b></b>Aguardando pagamento…</div></div>
+      <div class="sub" style="margin-top:16px">Pix copia e cola</div><div class="code" id="code"></div>
+      <button class="btn" id="copy" style="margin-top:8px">Copiar código Pix</button>
+      <button class="btn ghost" id="bk">Voltar</button>
+      <div class="secure">Pagamento protegido por criptografia SSL 256-bit</div>
+    </section>
+    <section class="sec" id="d3" style="text-align:center"><div class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="#04170f" stroke-width="3"><path d="M5 12l5 5 9-10"/></svg></div>
+      <h2>Pagamento informado</h2><p class="hint" style="max-width:360px;margin:8px auto">Assim que o Pix for confirmado, iniciamos o seu aplicativo. O prazo de 8 horas começa a contar a partir da confirmação. Entraremos em contato pelo WhatsApp informado.</p></section>
+  </main>
+</div></section>
+
+<script>
+var CFG={total:266.66,entrada:0,pix:"00020126870014br.gov.bcb.pix2565qrcode.fyhub.com.br/qr/v3/at/6803257a-d0c1-48ec-9e0b-166daa8860565204000053039865802BR5925MATTOS_TECH_INTERMEDIACAO6007NITEROI62070503***6304AB13"}; /* edite aqui ou use ?pix=CODIGO&total=266.66 na URL */
+var Q=new URLSearchParams(location.search);
+if(Q.get("total"))CFG.total=parseFloat(Q.get("total"))||CFG.total;
+if(Q.get("pix"))CFG.pix=Q.get("pix");
+CFG.entrada=CFG.total;
+var $=function(i){return document.getElementById(i)},brl=function(v){return v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"})};
+function scr(id){document.querySelectorAll(".scr").forEach(function(s){s.classList.remove("on")});$(id).classList.add("on");scrollTo(0,0)}
+$("cT").textContent=brl(CFG.total);$("c1").textContent=brl(CFG.entrada);$("r1").textContent=$("r2").textContent=$("vEt").textContent=brl(CFG.entrada);
+$("dt").textContent=new Date().toLocaleDateString("pt-BR");
+
+/* 1. loading 5s */
+var msgs=["Preparando documento","Aplicando cláusulas de garantia","Vinculando leis aplicáveis","Gerando código de autenticidade","Contrato pronto"],t0=Date.now(),D=5000;
+(function tick(){var p=Math.min(1,(Date.now()-t0)/D),e=p;
+ $("lb").style.width=e*100+"%";$("rp").textContent=Math.round(e*100)+"%";$("rf").style.strokeDashoffset=339.3*(1-e);
+ $("lt").textContent=msgs[Math.min(4,Math.floor(p*5))];
+ if(p<1)requestAnimationFrame(tick);else setTimeout(function(){scr("docS");observe();upd()},400)})();
+
+/* 2. leitura */
+function observe(){var io=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting)x.target.classList.add("v")})},{threshold:.15});document.querySelectorAll(".cl").forEach(function(c){io.observe(c)})}
+var reached=false;
+function upd(){var h=document.documentElement,sb=$("signBox"),p=Math.min(1,Math.max(0,scrollY/Math.max(1,sb.offsetTop+sb.offsetHeight*0-innerHeight*.2)));
+ var cls=document.querySelectorAll(".cl"),last=cls[cls.length-1].getBoundingClientRect();
+ if(last.bottom<innerHeight+40&&!reached){reached=true;sb.style.display="block";$("scrollHint").style.display="none";sizeSig()}
+ var tot=h.scrollHeight-innerHeight;p=tot>0?Math.min(1,scrollY/tot):1;
+ $("pgb").style.width=p*100+"%";$("pgt").textContent=Math.round(p*100)+"%"}
+addEventListener("scroll",function(){if($("docS").classList.contains("on"))upd()},{passive:true});
+
+/* máscara + CPF */
+$("cpf").oninput=function(){var v=this.value.replace(/\D/g,"").slice(0,11);this.value=v.replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d)/,"$1.$2").replace(/(\d{3})(\d{1,2})$/,"$1-$2");chk()};
+$("tel").oninput=function(){var v=this.value.replace(/\D/g,"").slice(0,11);this.value=v.replace(/(\d{2})(\d)/,"($1) $2").replace(/(\d{5})(\d{1,4})$/,"$1-$2")};
+function cpfOk(c){c=c.replace(/\D/g,"");if(c.length!=11||/^(\d)\1+$/.test(c))return false;for(var t=9;t<11;t++){var s=0;for(var i=0;i<t;i++)s+=c[i]*(t+1-i);if((s*10)%11%10!=c[t])return false}return true}
+
+/* assinatura (canvas) */
+var cv=$("sg"),cx=cv.getContext("2d"),drawing=false,inked=false;
+function sizeSig(){var r=cv.getBoundingClientRect(),d=devicePixelRatio||1;cv.width=r.width*d;cv.height=r.height*d;cx.scale(d,d);cx.lineWidth=2.6;cx.lineCap=cx.lineJoin="round";cx.strokeStyle="#ff8a2a";cx.shadowColor="#ff5a00";cx.shadowBlur=6}
+function pt(e){var r=cv.getBoundingClientRect();return[e.clientX-r.left,e.clientY-r.top]}
+cv.onpointerdown=function(e){drawing=true;cv.setPointerCapture(e.pointerId);var p=pt(e);cx.beginPath();cx.moveTo(p[0],p[1]);cx.lineTo(p[0]+.1,p[1]+.1);cx.stroke()};
+cv.onpointermove=function(e){if(!drawing)return;var p=pt(e);cx.lineTo(p[0],p[1]);cx.stroke();if(!inked){inked=true;$("sgh").style.opacity=0;chk()}};
+cv.onpointerup=cv.onpointercancel=function(){drawing=false};
+$("clr").onclick=function(){cx.clearRect(0,0,cv.width,cv.height);inked=false;$("sgh").style.opacity=1;chk()};
+function chk(){var n=$("nome").value.trim().split(/\s+/).length>1,c=cpfOk($("cpf").value);
+ $("eCpf").textContent=($("cpf").value.length==14&&!c)?"CPF inválido":"";
+ $("signBtn").disabled=!(n&&c&&inked&&$("lido").checked)}
+$("nome").oninput=$("lido").onchange=chk;
+
+/* 3. assinar */
+$("signBtn").onclick=function(){
+ var img=cv.toDataURL("image/png"),now=new Date(),stamp=now.toLocaleDateString("pt-BR")+" às "+now.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit"}),raw=$("nome").value+$("cpf").value+now.toISOString()+img.length;
+ scr("valid");var m=["Gerando código de autenticidade","Registrando data e hora","Selando documento"],i=0,iv=setInterval(function(){$("vt").textContent=m[++i%3]},900);
+ function fin(h){clearInterval(iv);var code=h.slice(0,12).toUpperCase().replace(/(.{4})/g,"$1-").slice(0,14);
+  $("nome2").value=$("nome").value.trim();$("cpf2").value=$("cpf").value;
+  $("sgInfo").textContent="Contrato assinado em "+stamp+" · Código "+code;
+  scr("chk");burst()}
+ var done=function(h){setTimeout(function(){fin(h)},2600)};
+ try{crypto.subtle.digest("SHA-256",new TextEncoder().encode(raw)).then(function(b){done(Array.from(new Uint8Array(b)).map(function(x){return x.toString(16).padStart(2,"0")}).join(""))},function(){done(Math.random().toString(16).slice(2)+"0000000000000")})}catch(e){done(Math.random().toString(16).slice(2)+"0000000000000")}};
+
+/* 4. checkout */
+$("go").onclick=function(){var m=/^\S+@\S+\.\S+$/.test($("mail").value),t=$("tel").value.replace(/\D/g,"").length>=10;
+ $("mail").classList.toggle("bad",!m);$("eMail").textContent=m?"":"E-mail inválido";$("tel").classList.toggle("bad",!t);if(!m||!t)return;
+ sec("d2");$("q2").classList.add("on");pix()};
+function sec(id){document.querySelectorAll(".sec").forEach(function(s){s.classList.remove("on")});$(id).classList.add("on")}
+$("bk").onclick=function(){sec("d1");$("q2").classList.remove("on")};
+function code(){return CFG.pix||"00020126PREENCHA-SEU-CODIGO-PIX-AQUI"}
+function pix(){var c=code();$("code").textContent=c;try{var q=qrcode(0,"M");q.addData(c);q.make();$("qr").innerHTML=q.createSvgTag(4,0)}catch(e){$("qr").textContent="QR indisponível"}}
+$("copy").onclick=function(){var b=this,f=function(){b.textContent="Código copiado";setTimeout(function(){b.textContent="Copiar código Pix"},2000)};(navigator.clipboard?navigator.clipboard.writeText(code()):Promise.reject()).then(f,f)};
+
+function burst(){var c=$("cf"),x=c.getContext("2d");c.width=innerWidth;c.height=innerHeight;var p=[];for(var i=0;i<130;i++)p.push({x:innerWidth/2,y:innerHeight/2,vx:(Math.random()-.5)*16,vy:Math.random()*-15-2,s:Math.random()*7+3,col:["#ff5a00","#ff8a2a","#fff","#2ee59d"][i%4],l:100});
+ (function f(){x.clearRect(0,0,c.width,c.height);var a=0;p.forEach(function(o){o.x+=o.vx;o.y+=o.vy;o.vy+=.45;o.l--;if(o.l>0){a++;x.fillStyle=o.col;x.globalAlpha=o.l/100;x.fillRect(o.x,o.y,o.s,o.s)}});if(a)requestAnimationFrame(f);else x.clearRect(0,0,c.width,c.height)})()}
+</script>
+</body>
+</html>
